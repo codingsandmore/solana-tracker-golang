@@ -73,9 +73,9 @@ func (s *SolanaTracker) GetRate(fromMint string, toMint string, amount float64, 
 // If the request fails with a status code of 500 and the retryOn500 flag is set to true, the function will
 // sleep for the specified duration and retry the request.
 // If the status code is not 200, an error is returned with the
-func (s *SolanaTracker) GetSwapTransaction(fromMint string, toMint string, fromAmount float64, slipPage float64, payerAddress string) (*SwapResponse, error) {
+func (s *SolanaTracker) GetSwapTransaction(fromMint string, toMint string, fromAmount float64, slipPage float64, payerAddress string, priorityFee float64) (*SwapResponse, error) {
 
-	url := fmt.Sprintf("https://swap-api.solanatracker.io/swap?from=%s&to=%s&fromAmount=%f&slippage=%f&payer=%s", fromMint, toMint, fromAmount, slipPage, payerAddress)
+	url := fmt.Sprintf("https://swap-api.solanatracker.io/swap?from=%s&to=%s&fromAmount=%f&slippage=%f&payer=%s&priorityFee=%f", fromMint, toMint, fromAmount, slipPage, payerAddress, priorityFee)
 
 	response, err := s.client.Get(url)
 
@@ -92,7 +92,7 @@ func (s *SolanaTracker) GetSwapTransaction(fromMint string, toMint string, fromA
 
 	if response.StatusCode == 500 && s.retryOn500 {
 		time.Sleep(s.retryOn500Wait)
-		return s.GetSwapTransaction(fromMint, toMint, fromAmount, slipPage, payerAddress)
+		return s.GetSwapTransaction(fromMint, toMint, fromAmount, slipPage, payerAddress, priorityFee)
 	}
 
 	if response.StatusCode != 200 {

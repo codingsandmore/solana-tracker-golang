@@ -84,7 +84,7 @@ func TestGetSwapTransaction(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			client := http.Client{}
 			swapper := NewSolanaTracker(&client)
-			_, err := swapper.GetSwapTransaction(tc.fromMint, tc.toMint, tc.fromAmount, tc.slipPage, tc.payerAddress)
+			_, err := swapper.GetSwapTransaction(tc.fromMint, tc.toMint, tc.fromAmount, tc.slipPage, tc.payerAddress, 0.01)
 			if tc.errorExpected && err == nil {
 				t.Errorf("expected an error but got none")
 			}
